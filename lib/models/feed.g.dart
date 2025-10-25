@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'newsletter.dart';
+part of 'feed.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NewsletterAdapter extends TypeAdapter<Newsletter> {
+class FeedAdapter extends TypeAdapter<Feed> {
   @override
   final int typeId = 0;
 
   @override
-  Newsletter read(BinaryReader reader) {
+  Feed read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Newsletter(
+    return Feed(
       title: fields[0] as String,
       description: fields[1] as String,
       link: fields[2] as String,
@@ -24,7 +24,7 @@ class NewsletterAdapter extends TypeAdapter<Newsletter> {
   }
 
   @override
-  void write(BinaryWriter writer, Newsletter obj) {
+  void write(BinaryWriter writer, Feed obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -41,7 +41,7 @@ class NewsletterAdapter extends TypeAdapter<Newsletter> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NewsletterAdapter &&
+      other is FeedAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

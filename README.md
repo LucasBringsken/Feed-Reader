@@ -1,4 +1,4 @@
-# newsletter
+# Feed Reader
 
 A new Flutter project.
 

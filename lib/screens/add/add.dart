@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:newsletter/models/newsletter.dart';
-import 'package:newsletter/services/newsletter_store.dart';
-import 'package:newsletter/services/rss-service.dart' as rss_service;
-import 'package:newsletter/shared/custom_button.dart';
-import 'package:newsletter/shared/custom_text.dart';
-import 'package:newsletter/theme.dart';
+import 'package:feedreader/models/feed.dart';
+import 'package:feedreader/services/feed_store.dart';
+import 'package:feedreader/services/feed-service.dart' as feed_service;
+import 'package:feedreader/shared/custom_button.dart';
+import 'package:feedreader/shared/custom_text.dart';
+import 'package:feedreader/theme.dart';
 import 'package:provider/provider.dart';
 
 class AddScreen extends StatefulWidget {
@@ -46,33 +46,31 @@ class _AddScreenState extends State<AddScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void saveNewsletter() async {
+  void saveFeed() async {
     try {
-      Newsletter newsletter = await rss_service.loadNewsletter(
-        _urlController.text.trim(),
-      );
+      Feed feed = await feed_service.loadFeed(_urlController.text.trim());
 
       if (!mounted) return;
 
-      if (Provider.of<NewsletterStore>(
+      if (Provider.of<FeedStore>(
         context,
         listen: false,
-      ).containsNewsletter(_urlController.text.trim())) {
-        showErrorSnackbar("⚠️ Diesen Newsletter hast du bereits abonniert.");
+      ).containsFeedLink(_urlController.text.trim())) {
+        showErrorSnackbar("⚠️ Diesen Feed hast du bereits abonniert.");
         return;
       }
 
-      Provider.of<NewsletterStore>(context, listen: false).addNewsletter(
-        Newsletter(
-          title: newsletter.title,
-          description: newsletter.description,
+      Provider.of<FeedStore>(context, listen: false).addFeed(
+        Feed(
+          title: feed.title,
+          description: feed.description,
           link: _urlController.text.trim(),
         ),
       );
       Navigator.pop(context);
     } catch (_) {
       showErrorSnackbar(
-        "⚠️ Du hast keine gültige RSS-Feed-URL eingegeben!\n\nBitte korrigiere deine Eingabe und versuche es erneut!",
+        "⚠️ Du hast keine gültige Feed-URL eingegeben!\n\nBitte korrigiere deine Eingabe und versuche es erneut!",
       );
       return;
     }
@@ -81,21 +79,21 @@ class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const CustomTitle("Newsletter hinzufügen")),
+      appBar: AppBar(title: const CustomTitle("Feed hinzufügen")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
 
         child: Column(
           children: [
             const CustomHeadline(
-              "Hier kannst du einen neuen Newsletter hinzufügen. Gib hierzu einfach die RSS-Feed-URL unten ein.",
+              "Hier kannst du einen neuen Feed hinzufügen. Gib hierzu einfach die Feed-URL unten ein.",
             ),
             const SizedBox(height: 20),
             TextField(
               controller: _urlController,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.link),
-                label: CustomText("Link zum Newsletter"),
+                label: CustomText("Link zum Feed"),
               ),
             ),
             const SizedBox(height: 20),
@@ -105,7 +103,7 @@ class _AddScreenState extends State<AddScreen> {
                 CustomButton(
                   "Speichern",
                   onPressed: () {
-                    saveNewsletter();
+                    saveFeed();
                   },
                   disabled: _isButtonDisabled,
                 ),

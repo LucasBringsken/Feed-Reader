@@ -1,4 +1,4 @@
-package com.example.newsletter
+package com.example.feedreader
 
 import io.flutter.embedding.android.FlutterActivity
 

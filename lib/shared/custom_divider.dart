@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newsletter/theme.dart';
+import 'package:feedreader/theme.dart';
 
 class CustomDivider extends StatelessWidget {
   const CustomDivider({super.key});

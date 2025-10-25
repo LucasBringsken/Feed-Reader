@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:newsletter/models/newsletter.dart';
-import 'package:newsletter/screens/newsletter_details/newsletter_details.dart';
-import 'package:newsletter/services/newsletter_store.dart';
-import 'package:newsletter/shared/custom_button.dart';
-import 'package:newsletter/shared/custom_text.dart';
+import 'package:feedreader/models/feed.dart';
+import 'package:feedreader/screens/feed_details/feed_details.dart';
+import 'package:feedreader/services/feed_store.dart';
+import 'package:feedreader/shared/custom_button.dart';
+import 'package:feedreader/shared/custom_text.dart';
 import 'package:provider/provider.dart';
 
-class NewsletterCard extends StatelessWidget {
-  const NewsletterCard(this.newsletter, {super.key});
+class FeedCard extends StatelessWidget {
+  const FeedCard(this.feed, {super.key});
 
-  final Newsletter newsletter;
+  final Feed feed;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +18,7 @@ class NewsletterCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (ctx) => NewsletterDetailsScreen(newsletter: newsletter),
-          ),
+          MaterialPageRoute(builder: (ctx) => FeedDetailsScreen(feed: feed)),
         );
       },
       child: Padding(
@@ -31,9 +29,9 @@ class NewsletterCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTitle(newsletter.title, small: true),
+                  CustomTitle(feed.title, small: true),
                   const SizedBox(height: 10),
-                  CustomText(newsletter.description),
+                  CustomText(feed.description),
                 ],
               ),
             ),
@@ -45,7 +43,7 @@ class NewsletterCard extends StatelessWidget {
                     return AlertDialog(
                       title: const CustomHeadline("Wirklich löschen?"),
                       content: const CustomText(
-                        "Möchtest du diesen Newsletter wirklich löschen?",
+                        "Möchtest du diesen Feed wirklich löschen?",
                       ),
                       actions: [
                         TextButton(
@@ -57,10 +55,10 @@ class NewsletterCard extends StatelessWidget {
                         CustomButton(
                           "Bestätigen",
                           onPressed: () {
-                            Provider.of<NewsletterStore>(
+                            Provider.of<FeedStore>(
                               context,
                               listen: false,
-                            ).removeNewsletter(newsletter);
+                            ).removeFeed(feed);
                             Navigator.pop(context);
                           },
                         ),

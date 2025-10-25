@@ -1,14 +1,10 @@
 import 'package:hive/hive.dart';
 
-part 'newsletter.g.dart';
+part 'feed.g.dart';
 
 @HiveType(typeId: 0)
-class Newsletter {
-  Newsletter({
-    required this.title,
-    required this.description,
-    required this.link,
-  });
+class Feed {
+  Feed({required this.title, required this.description, required this.link});
 
   @HiveField(0)
   final String title;

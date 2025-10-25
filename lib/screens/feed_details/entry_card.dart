@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newsletter/models/entry.dart';
-import 'package:newsletter/shared/custom_text.dart';
+import 'package:feedreader/models/entry.dart';
+import 'package:feedreader/shared/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EntryCard extends StatelessWidget {

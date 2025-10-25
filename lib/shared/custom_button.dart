@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newsletter/shared/custom_text.dart';
-import 'package:newsletter/theme.dart';
+import 'package:feedreader/shared/custom_text.dart';
+import 'package:feedreader/theme.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton(

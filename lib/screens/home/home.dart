@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:newsletter/screens/add/add.dart';
-import 'package:newsletter/screens/home/newsletter_card.dart';
-import 'package:newsletter/services/newsletter_store.dart';
-import 'package:newsletter/shared/custom_divider.dart';
-import 'package:newsletter/shared/custom_text.dart';
+import 'package:feedreader/screens/add/add.dart';
+import 'package:feedreader/screens/home/feed_card.dart';
+import 'package:feedreader/services/feed_store.dart';
+import 'package:feedreader/shared/custom_divider.dart';
+import 'package:feedreader/shared/custom_text.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,17 +12,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const CustomTitle("Newsletter-Übersicht")),
+      appBar: AppBar(title: const CustomTitle("Feed-Übersicht")),
       body: Column(
         children: [
           Expanded(
-            child: Consumer<NewsletterStore>(
+            child: Consumer<FeedStore>(
               builder: (context, value, child) {
-                if (value.newsletters.length > 0) {
+                if (value.feeds.length > 0) {
                   return ListView.separated(
-                    itemCount: value.newsletters.length,
-                    itemBuilder: (_, index) =>
-                        NewsletterCard(value.newsletters[index]),
+                    itemCount: value.feeds.length,
+                    itemBuilder: (_, index) => FeedCard(value.feeds[index]),
                     separatorBuilder: (_, __) => const CustomDivider(),
                   );
                 } else {
@@ -32,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomText("Du hast noch keine Newsletter abonniert."),
+                        CustomText("Du hast noch keine Feeds abonniert."),
                       ],
                     ),
                   );
