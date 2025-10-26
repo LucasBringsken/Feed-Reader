@@ -3,8 +3,9 @@ import 'package:feedreader/models/entry.dart';
 import 'package:feedreader/models/feed.dart';
 import 'package:xml/xml.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
 
-String formatFeedDate(String rawDate) {
+DateTime formatFeedDate(String rawDate) {
   DateTime date;
   try {
     date = DateTime.parse(rawDate);
@@ -12,17 +13,16 @@ String formatFeedDate(String rawDate) {
     date = DateFormat("EEE, dd MMM yyyy HH:mm:ss Z", 'en_US').parseUtc(rawDate);
   }
 
-  final localDate = date.toLocal();
-
-  final formatter = DateFormat("d. MMMM yyyy, HH:mm 'Uhr'", 'de_DE');
-  return formatter.format(localDate);
+  return date;
 }
 
 Future<String> fetchFeedBody(String url) async {
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
-    return response.body;
+    final bytes = response.bodyBytes;
+    final utf8String = utf8.decode(bytes, allowMalformed: true);
+    return utf8String;
   } else {
     throw Exception(response.statusCode);
   }
@@ -68,12 +68,13 @@ List<Entry> parseEntryContent(String xmlString) {
         element.getElement('summary')?.innerText ??
         '';
     final author =
-        element.getElement('author')?.innerText ??
         element.getElement('author')?.getElement('name')?.innerText ??
-        '';
+        element.getElement('author')?.innerText ??
+        element.getElement('dc:creator')?.innerText;
     final category =
         element.getElement('category')?.innerText ??
         element.getElement('category')?.getAttribute('label') ??
+        element.getElement('category')?.getAttribute('term') ??
         '';
     final pubDateText =
         element.getElement('pubDate')?.innerText ??
@@ -84,7 +85,7 @@ List<Entry> parseEntryContent(String xmlString) {
         element.getElement('enclosure')?.getAttribute('url') ??
         element.getElement('logo')?.innerText;
 
-    String pubDate = "";
+    DateTime? pubDate;
     if (pubDateText != null) {
       pubDate = formatFeedDate(pubDateText);
     }

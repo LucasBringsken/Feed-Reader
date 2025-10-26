@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
-  const CustomText(
-    this.text, {
-    super.key,
-    this.limitText = false,
-    this.small = false,
-  });
+  const CustomText(this.text, {super.key, this.lineLimit, this.small = false});
 
   final String text;
-  final bool limitText;
+  final int? lineLimit;
   final bool small;
 
   @override
@@ -19,8 +14,10 @@ class CustomText extends StatelessWidget {
       style: small
           ? Theme.of(context).textTheme.bodySmall
           : Theme.of(context).textTheme.bodyMedium,
-      maxLines: limitText ? 7 : null,
-      overflow: limitText ? TextOverflow.ellipsis : TextOverflow.visible,
+      maxLines: lineLimit,
+      overflow: lineLimit != null
+          ? TextOverflow.ellipsis
+          : TextOverflow.visible,
     );
   }
 }

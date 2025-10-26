@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:feedreader/models/entry.dart';
 import 'package:feedreader/shared/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class EntryCard extends StatelessWidget {
   const EntryCard(this.entry, {super.key});
@@ -13,6 +14,22 @@ class EntryCard extends StatelessWidget {
     if (!await launchUrl(parsedUrl, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $parsedUrl');
     }
+  }
+
+  String datetimeToString(DateTime date) {
+    final localDate = date.toLocal();
+
+    final formatter = DateFormat("d. MMMM yyyy, HH:mm 'Uhr'", 'de_DE');
+    return formatter.format(localDate);
+  }
+
+  String removeHtmlTags(String htmlText) {
+    final RegExp exp = RegExp(
+      r'<[^>]*>',
+      multiLine: true,
+      caseSensitive: false,
+    );
+    return htmlText.replaceAll(exp, '');
   }
 
   @override
@@ -36,12 +53,15 @@ class EntryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomHeadline(entry.title),
+                CustomHeadline(removeHtmlTags(entry.title)),
                 const SizedBox(height: 5),
                 if (entry.pubDate != null)
-                  CustomText(entry.pubDate.toString(), small: true),
+                  CustomText(datetimeToString(entry.pubDate!), small: true),
                 const SizedBox(height: 5),
-                CustomText(entry.description, limitText: true),
+                CustomText(removeHtmlTags(entry.description), lineLimit: 7),
+                const SizedBox(height: 5),
+                if (entry.author != null)
+                  CustomText(removeHtmlTags(entry.author!), small: true),
                 const SizedBox(height: 10),
                 GestureDetector(
                   child: const Row(

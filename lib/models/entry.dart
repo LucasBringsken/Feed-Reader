@@ -14,6 +14,6 @@ class Entry {
   final String description;
   final String? author;
   final String? category;
-  final String? pubDate;
+  final DateTime? pubDate;
   final String? image;
 }
