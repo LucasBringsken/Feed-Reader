@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:feedreader/models/feed.dart';
 import 'package:feedreader/services/feed_store.dart';
-import 'package:feedreader/services/feed-service.dart' as feed_service;
+import 'package:feedreader/services/feed_service.dart' as feed_service;
 import 'package:feedreader/shared/custom_button.dart';
 import 'package:feedreader/shared/custom_text.dart';
 import 'package:feedreader/theme.dart';

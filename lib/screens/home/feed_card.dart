@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:feedreader/models/feed.dart';
 import 'package:feedreader/screens/feed_details/feed_details.dart';
-import 'package:feedreader/services/feed_store.dart';
-import 'package:feedreader/shared/custom_button.dart';
 import 'package:feedreader/shared/custom_text.dart';
-import 'package:provider/provider.dart';
 
 class FeedCard extends StatelessWidget {
   const FeedCard(this.feed, {super.key});
@@ -37,40 +34,6 @@ class FeedCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) {
-                    return AlertDialog(
-                      title: const CustomHeadline("Wirklich löschen?"),
-                      content: const CustomText(
-                        "Möchtest du diesen Feed wirklich löschen?",
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                          },
-                          child: const CustomHeadline("Abbrechen"),
-                        ),
-                        CustomButton(
-                          "Bestätigen",
-                          onPressed: () {
-                            Provider.of<FeedStore>(
-                              context,
-                              listen: false,
-                            ).removeFeed(feed);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              icon: const Icon(Icons.delete),
             ),
           ],
         ),

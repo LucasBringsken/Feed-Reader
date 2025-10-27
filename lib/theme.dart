@@ -8,6 +8,8 @@ class AppColors {
   static Color appBarColor = const Color(0xFF9FA4B6);
   static Color dividerColor = const Color(0x4D38383B);
   static Color textColor = const Color(0xFF2A324B);
+  static Color deleteColor = const Color.fromARGB(255, 180, 59, 59);
+  static Color editColor = const Color.fromARGB(255, 87, 148, 177);
 }
 
 ThemeData primaryTheme = ThemeData(

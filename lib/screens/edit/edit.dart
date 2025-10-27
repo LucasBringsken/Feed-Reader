@@ -1,15 +1,21 @@
+import 'package:feedreader/models/feed.dart';
+import 'package:feedreader/shared/custom_text.dart';
 import 'package:flutter/material.dart';
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class EditScreen extends StatefulWidget {
+  const EditScreen(this.feed, {super.key});
+
+  final Feed feed;
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<EditScreen> createState() => _EditScreenState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _EditScreenState extends State<EditScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const CustomTitle("Feed bearbeiten")),
+    );
   }
 }

@@ -4,7 +4,7 @@ import 'package:feedreader/models/feed.dart';
 import 'package:feedreader/screens/feed_details/entry_card.dart';
 import 'package:feedreader/shared/custom_divider.dart';
 import 'package:feedreader/shared/custom_text.dart';
-import 'package:feedreader/services/feed-service.dart' as feed_service;
+import 'package:feedreader/services/feed_service.dart' as feed_service;
 
 class FeedDetailsScreen extends StatelessWidget {
   const FeedDetailsScreen({super.key, required this.feed});
