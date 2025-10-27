@@ -31,7 +31,10 @@ class FeedCard extends StatelessWidget {
                 children: [
                   CustomTitle(feed.title, small: true),
                   const SizedBox(height: 10),
-                  CustomText(feed.description),
+                  CustomText(
+                    feed.description ?? "Keine Beschreibung vorhanden",
+                    italic: feed.description == null,
+                  ),
                 ],
               ),
             ),

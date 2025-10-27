@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
-  const CustomText(this.text, {super.key, this.lineLimit, this.small = false});
+  const CustomText(
+    this.text, {
+    super.key,
+    this.lineLimit,
+    this.small = false,
+    this.italic = false,
+  });
 
   final String text;
   final int? lineLimit;
   final bool small;
+  final bool italic;
 
   @override
   Widget build(BuildContext context) {
+    final baseStyle = small
+        ? Theme.of(context).textTheme.bodySmall
+        : Theme.of(context).textTheme.bodyMedium;
+
     return Text(
       text,
-      style: small
-          ? Theme.of(context).textTheme.bodySmall
-          : Theme.of(context).textTheme.bodyMedium,
+      style: baseStyle?.copyWith(
+        fontStyle: italic ? FontStyle.italic : FontStyle.normal,
+      ),
       maxLines: lineLimit,
       overflow: lineLimit != null
           ? TextOverflow.ellipsis

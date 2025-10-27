@@ -45,8 +45,7 @@ Feed parseFeed(String xmlString) {
   final link = feedInfo.getElement('link')?.innerText ?? '';
   final description =
       feedInfo.getElement('description')?.innerText ??
-      feedInfo.getElement('subtitle')?.innerText ??
-      'Keine Beschreibung vorhanden';
+      feedInfo.getElement('subtitle')?.innerText;
 
   return Feed(title: title, description: description, link: link);
 }
