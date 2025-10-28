@@ -23,4 +23,16 @@ class FeedStore extends ChangeNotifier {
   bool containsFeedLink(String link) {
     return _box.values.any((item) => item.link == link);
   }
+
+  void updateFeed(Feed updatedFeed) {
+    final existingFeed = _box.keys.firstWhere(
+      (key) => _box.get(key)?.link == updatedFeed.link,
+      orElse: () => null,
+    );
+
+    if (existingFeed != null) {
+      _box.put(existingFeed, updatedFeed);
+      notifyListeners();
+    }
+  }
 }
