@@ -116,6 +116,21 @@ List<Entry> parseEntryContent(String xmlString) {
 Future<List<Entry>> loadFeedEntries(String url) async {
   final xmlString = await fetchFeedBody(url);
   final items = parseEntryContent(xmlString);
+
+  items.sort((a, b) {
+    final dateA = a.pubDate;
+    final dateB = b.pubDate;
+
+    if (dateA != null && dateB != null) {
+      return dateB.compareTo(dateA);
+    } else if (dateA != null && dateB == null) {
+      return -1;
+    } else if (dateA == null && dateB != null) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
   return items;
 }
 
