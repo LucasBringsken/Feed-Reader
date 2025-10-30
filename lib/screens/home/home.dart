@@ -1,6 +1,7 @@
 import 'package:feedreader/models/feed.dart';
 import 'package:feedreader/screens/edit/edit.dart';
 import 'package:feedreader/shared/custom_button.dart';
+import 'package:feedreader/shared/snackbar.dart';
 import 'package:feedreader/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:feedreader/screens/add/add.dart';
@@ -10,6 +11,7 @@ import 'package:feedreader/shared/custom_divider.dart';
 import 'package:feedreader/shared/custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:feedreader/services/feed_service.dart' as feed_service;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -48,66 +50,99 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<void> _reload() async {
+    final feedStore = Provider.of<FeedStore>(context, listen: false);
+
+    if (!mounted) return;
+
+    for (final Feed feed in feedStore.feeds) {
+      try {
+        final entries = await feed_service.loadFeedEntries(feed.link);
+
+        if (!mounted) return;
+
+        if (entries.isNotEmpty) {
+          if (feed.latestEntryId != entries[0].id) {
+            feed.unreadUpdates = true;
+          }
+        }
+      } catch (e) {
+        showErrorSnackbar("Fehler beim Laden des Feeds", context);
+      }
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _reload();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const CustomTitle("Feed-Übersicht")),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<FeedStore>(
-              builder: (context, value, child) {
-                if (value.feeds.length > 0) {
-                  return ListView.separated(
-                    itemCount: value.feeds.length,
-                    itemBuilder: (_, index) => Slidable(
-                      key: ValueKey(value.feeds[index].title),
+      body: RefreshIndicator.adaptive(
+        onRefresh: _reload,
+        child: Column(
+          children: [
+            Expanded(
+              child: Consumer<FeedStore>(
+                builder: (context, value, child) {
+                  if (value.feeds.length > 0) {
+                    return ListView.separated(
+                      itemCount: value.feeds.length,
+                      itemBuilder: (_, index) => Slidable(
+                        key: ValueKey(value.feeds[index].title),
 
-                      endActionPane: ActionPane(
-                        motion: const DrawerMotion(),
+                        endActionPane: ActionPane(
+                          motion: const DrawerMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (ctx) =>
+                                        EditScreen(value.feeds[index]),
+                                  ),
+                                );
+                              },
+                              backgroundColor: AppColors.editColor,
+                              icon: Icons.edit,
+                            ),
+                            SlidableAction(
+                              onPressed: (context) {
+                                deleteFeed(value.feeds[index]);
+                              },
+                              backgroundColor: AppColors.deleteColor,
+                              icon: Icons.delete,
+                            ),
+                          ],
+                        ),
+                        child: FeedCard(value.feeds[index]),
+                      ),
+                      separatorBuilder: (_, __) => const CustomDivider(),
+                    );
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.all(32),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) =>
-                                      EditScreen(value.feeds[index]),
-                                ),
-                              );
-                            },
-                            backgroundColor: AppColors.editColor,
-                            icon: Icons.edit,
-                          ),
-                          SlidableAction(
-                            onPressed: (context) {
-                              deleteFeed(value.feeds[index]);
-                            },
-                            backgroundColor: AppColors.deleteColor,
-                            icon: Icons.delete,
-                          ),
+                          CustomText("Du hast noch keine Feeds abonniert."),
                         ],
                       ),
-                      child: FeedCard(value.feeds[index]),
-                    ),
-                    separatorBuilder: (_, __) => const CustomDivider(),
-                  );
-                } else {
-                  return const Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText("Du hast noch keine Feeds abonniert."),
-                      ],
-                    ),
-                  );
-                }
-              },
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {

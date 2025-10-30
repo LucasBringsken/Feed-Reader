@@ -1,5 +1,6 @@
 class Entry {
   Entry({
+    required this.id,
     required this.title,
     required this.link,
     required this.description,
@@ -9,6 +10,7 @@ class Entry {
     this.image,
   });
 
+  final String id;
   final String title;
   final String link;
   final String description;

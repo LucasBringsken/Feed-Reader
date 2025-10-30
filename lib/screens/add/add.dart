@@ -1,10 +1,10 @@
+import 'package:feedreader/shared/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:feedreader/models/feed.dart';
 import 'package:feedreader/services/feed_store.dart';
 import 'package:feedreader/services/feed_service.dart' as feed_service;
 import 'package:feedreader/shared/custom_button.dart';
 import 'package:feedreader/shared/custom_text.dart';
-import 'package:feedreader/theme.dart';
 import 'package:provider/provider.dart';
 
 class AddScreen extends StatefulWidget {
@@ -38,14 +38,6 @@ class _AddScreenState extends State<AddScreen> {
     super.dispose();
   }
 
-  void showErrorSnackbar(String message) {
-    final snackBar = SnackBar(
-      content: CustomHeadline(message, textColor: AppColors.secondaryAccent),
-      action: SnackBarAction(label: "X", onPressed: () {}),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   void saveFeed() async {
     try {
       Feed feed = await feed_service.loadFeed(_urlController.text.trim());
@@ -56,7 +48,7 @@ class _AddScreenState extends State<AddScreen> {
         context,
         listen: false,
       ).containsFeedLink(_urlController.text.trim())) {
-        showErrorSnackbar("⚠️ Diesen Feed hast du bereits abonniert.");
+        showErrorSnackbar("Diesen Feed hast du bereits abonniert.", context);
         return;
       }
 
@@ -65,12 +57,14 @@ class _AddScreenState extends State<AddScreen> {
           title: feed.title,
           description: feed.description,
           link: _urlController.text.trim(),
+          latestEntryId: feed.latestEntryId,
         ),
       );
       Navigator.pop(context);
     } catch (_) {
       showErrorSnackbar(
-        "⚠️ Du hast keine gültige Feed-URL eingegeben!\n\nBitte korrigiere deine Eingabe und versuche es erneut!",
+        "Du hast keine gültige Feed-URL eingegeben!\n\nBitte korrigiere deine Eingabe und versuche es erneut!",
+        context,
       );
       return;
     }

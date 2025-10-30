@@ -1,3 +1,4 @@
+import 'package:feedreader/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:feedreader/models/feed.dart';
 import 'package:feedreader/screens/feed_details/feed_details.dart';

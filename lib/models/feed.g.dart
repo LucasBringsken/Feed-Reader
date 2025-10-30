@@ -18,21 +18,26 @@ class FeedAdapter extends TypeAdapter<Feed> {
     };
     return Feed(
       title: fields[0] as String,
-      description: fields[1] as String,
+      description: fields[1] as String?,
       link: fields[2] as String,
-    );
+      latestEntryId: fields[3] as String,
+    )..unreadUpdates = fields[4] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Feed obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.description)
       ..writeByte(2)
-      ..write(obj.link);
+      ..write(obj.link)
+      ..writeByte(3)
+      ..write(obj.latestEntryId)
+      ..writeByte(4)
+      ..write(obj.unreadUpdates);
   }
 
   @override

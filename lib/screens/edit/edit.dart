@@ -45,6 +45,7 @@ class _EditScreenState extends State<EditScreen> {
         title: _nameController.text.trim(),
         link: widget.feed.link,
         description: description != "" ? description : null,
+        latestEntryId: widget.feed.latestEntryId,
       ),
     );
     Navigator.pop(context);

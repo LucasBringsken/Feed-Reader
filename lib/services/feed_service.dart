@@ -37,7 +37,6 @@ Feed parseFeed(String xmlString) {
       : document.findAllElements('feed').first;
 
   final title = feedInfo.getElement('title')?.innerText;
-
   if (title == null) {
     throw Exception();
   }
@@ -47,7 +46,14 @@ Feed parseFeed(String xmlString) {
       feedInfo.getElement('description')?.innerText ??
       feedInfo.getElement('subtitle')?.innerText;
 
-  return Feed(title: title, description: description, link: link);
+  List<Entry> feedEntries = parseEntryContent(xmlString);
+
+  return Feed(
+    title: title,
+    description: description,
+    link: link,
+    latestEntryId: feedEntries[0].id,
+  );
 }
 
 List<Entry> parseEntryContent(String xmlString) {
@@ -56,6 +62,11 @@ List<Entry> parseEntryContent(String xmlString) {
 
   final entries = items.isNotEmpty ? items : document.findAllElements('entry');
   return entries.map((element) {
+    final id =
+        element.getElement('id')?.innerText ??
+        element.getElement('guid')?.innerText ??
+        '';
+
     final title = element.getElement('title')?.innerText ?? 'Kein Titel';
 
     final linkElement = element.findElements('link').firstOrNull;
@@ -90,6 +101,7 @@ List<Entry> parseEntryContent(String xmlString) {
     }
 
     return Entry(
+      id: id,
       title: title,
       link: link,
       description: description,
