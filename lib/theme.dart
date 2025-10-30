@@ -35,6 +35,12 @@ ThemeData primaryTheme = ThemeData(
       fontSize: 14,
       letterSpacing: 1,
     ),
+    headlineSmall: TextStyle(
+      color: AppColors.textColor,
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 1,
+    ),
     headlineMedium: TextStyle(
       color: AppColors.textColor,
       fontSize: 15,

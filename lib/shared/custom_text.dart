@@ -34,14 +34,22 @@ class CustomText extends StatelessWidget {
 }
 
 class CustomHeadline extends StatelessWidget {
-  const CustomHeadline(this.text, {super.key, this.textColor});
+  const CustomHeadline(
+    this.text, {
+    super.key,
+    this.textColor,
+    this.small = false,
+  });
 
   final String text;
   final Color? textColor;
+  final bool small;
 
   @override
   Widget build(BuildContext context) {
-    final baseStyle = Theme.of(context).textTheme.headlineMedium;
+    final baseStyle = small
+        ? Theme.of(context).textTheme.headlineSmall
+        : Theme.of(context).textTheme.headlineMedium;
 
     return Text(
       text,

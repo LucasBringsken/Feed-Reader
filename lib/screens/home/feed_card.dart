@@ -27,6 +27,12 @@ class FeedCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (feed.unreadUpdates)
+                    CustomHeadline(
+                      "Neue Updates!",
+                      small: true,
+                      textColor: AppColors.deleteColor,
+                    ),
                   CustomTitle(feed.title, small: true),
                   const SizedBox(height: 10),
                   CustomText(
